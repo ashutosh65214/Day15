@@ -123,6 +123,23 @@ namespace Day15
 
         private void BtnSearch_Click(object sender, EventArgs e)
         {
+            using(con = new SqlConnection(ConfigurationManager.ConnectionStrings["HRSQL"].ConnectionString))
+            {
+                using (adapter = new SqlDataAdapter("Select * from Department where cDepartmentCode like '"+TxtDepartCode.Text+"%'", con))
+                {
+                    DataTable dt = new DataTable();
+                    adapter.Fill(dt);
+                    GridDepartment.DataSource=dt;
+
+                    ds= new DataSet();
+                    adapter.Fill(ds, "Department");
+                    TxtDepartName.Text = ds.Tables["Department"].Rows[0]["vDepartmentName"].ToString();
+                    TxtDepartHead.Text = ds.Tables["Department"].Rows[0]["vDepartmentHead"].ToString();
+                    TxtLocation.Text = ds.Tables["Department"].Rows[0]["vLocation"].ToString();
+                    adapter.Update(ds, "Department");
+
+                }
+            }
 
         }
     }
